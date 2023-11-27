@@ -24,6 +24,7 @@ router.route("/add").post((req,res)=>{
 
 })
 
+
 router.route("/").get((req,res)=>{
       student.find().then((students)=>{
         res.json(students);
