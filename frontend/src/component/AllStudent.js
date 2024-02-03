@@ -4,11 +4,14 @@ import { Link } from 'react-router-dom';
 
 export default function AllStudent() {
   const [students, setStudents] = useState([]);
+  const [originalStudents, setOriginalStudents] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const getAllData = () => {
     axios.get("http://localhost:8070/student/")
       .then((res) => {
         setStudents(res.data);
+        setOriginalStudents(res.data);
       })
       .catch((err) => {
         alert(err.message);
@@ -20,21 +23,40 @@ export default function AllStudent() {
   }, []);
 
   const handleDelete = (studentId) => {
-    // Make a DELETE request to delete the student with the given ID
     axios.delete(`http://localhost:8070/student/delete/${studentId}`)
-      .then((res) => {
+      .then(() => {
         alert("Student deleted successfully!");
-        // Update the students list after deletion
         getAllData();
+        setSearchQuery(''); // Clear the search query after deletion
       })
       .catch((err) => {
         alert(err.message);
       });
   };
 
+  const handleInputChange = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+
+    // Filter students based on the search query as you type
+    const filteredStudents = originalStudents.filter(student =>
+      student.name.toLowerCase().includes(query) ||student.stdId.toLowerCase().includes(query)
+    );
+    setStudents(filteredStudents);
+  };
+
   return (
     <div className="container">
       <h1>All Students</h1>
+
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Search by name"
+          value={searchQuery}
+          onChange={handleInputChange}
+        />
+      </div>
 
       <table className="table">
         <thead>
