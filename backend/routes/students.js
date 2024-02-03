@@ -68,12 +68,12 @@ router.route("/delete/:id").delete(async(req,res)=>{
     const deleteUser = await student.findByIdAndDelete(userId).then(()=>{
         res.status(200).send({
             status:"User Deleted",
-        }).catch((err)=>{
-            console.log(err.message),
-            res.status(500).send({
-                status:"Error with deleteing data",
-                error:err.message
-            })
+        })
+            }).catch((err)=>{
+                console.log(err.message),
+                res.status(500).send({
+                    status:"Error with deleteing data",
+                    error:err.message
         })
     })
 })
@@ -86,14 +86,14 @@ router.route("/get/:id").get(async(req,res)=>{
         res.status(200).send({
             status:"data Fetched",
             user:students
+        })
+            
         }).catch((err)=>{
             console.log(err.message);
             res.status(500).send({
                 status:"Error with get data",
                 error:err.message
             })
-            
-        })
     })
 })
 
